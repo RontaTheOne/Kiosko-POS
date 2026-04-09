@@ -14,13 +14,6 @@ app.get("/", (req, res) => {
   `);
 })
 
-app.get("/productos", (req, res) => {
-   res.send(`
-    <h1>Lista de Productos</h1>
-    <p>Aquí iría la lista de productos</p>
-  `);
-})
-
 // Manejo de rutas no encontradas
 app.use((req, res) => {
   res.status(404).send(`
