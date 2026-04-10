@@ -3,7 +3,7 @@ import pool from '../config/db.js';
 // Obtener todos los productos
 export const getProducts = async (req, res) => {
   try { 
-    const result = await pool.query('SELECT * FROM products');
+    const result = await pool.query('SELECT * FROM producto');
     res.json(result.rows);
   } catch (err) {
     console.error('Error al obtener productos:', err);
