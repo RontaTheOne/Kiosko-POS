@@ -1,5 +1,5 @@
 import express from "express";
-
+import productRoutes from "./routes/productroutes.js";
 const app = express();
 
 // Middleware 
@@ -13,8 +13,9 @@ app.get("/", (req, res) => {
     <p>KioskPOS ejecutandose con exito 🚀</p>
   `);
 })
+app.use('/producto', productRoutes);
 
-// Manejo de rutas no encontradas
+// Ruta no encontrada
 app.use((req, res) => {
   res.status(404).send(`
     <h1>ERROR 404</h1>
