@@ -4,6 +4,9 @@ import pool from '../config/db.js';
 export const getProducts = async (req, res) => {
   try { 
     const result = await pool.query('SELECT * FROM producto');
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'No hay productos' });
+    }
     res.json(result.rows);
   } catch (err) {
     console.error('Error al obtener productos:', err);
@@ -15,7 +18,7 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
+    const result = await pool.query('SELECT * FROM producto WHERE id_producto = $1', [id]);
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
