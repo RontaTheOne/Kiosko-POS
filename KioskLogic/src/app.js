@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 // Manejo de rutas no encontradas
 app.use((req, res) => {
   res.status(404).send(`
-    <h1>ERR 404</h1>
+    <h1>ERROR 404</h1>
     <p>Ruta no encontrada</p>
   `);
 });
