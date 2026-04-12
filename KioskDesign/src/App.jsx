@@ -1,14 +1,15 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  
+import { BrowserRouter, Routes, Route } from 'react-router-dom';  
 import Home from './pages/home.jsx';
+import { Navigate } from 'react-router-dom';
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Router>
+    </BrowserRouter>
   )
 }
 
