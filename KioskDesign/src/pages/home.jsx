@@ -1,18 +1,36 @@
-import React from 'react';
-import ProductCard from '../components/Product/productCard';
+import React from "react";
+import ProductCard from "../components/Product/productCard";
 
-function Home(){
+function Home() {
   return (
-    <div className='container'>
+    <div className="container">
       <h1>Home</h1>
       <p>Welcome to the Home page!</p>
-      <div className="product-cards">
-        <ProductCard product={{ name: 'Product 1', price: 19.99, image: '/images/product1.jpg' }} />
-        <ProductCard product={{ name: 'Product 2', price: 29.99, image: '/images/product2.jpg' }} />
-        <ProductCard product={{ name: 'Product 3', price: 39.99, image: '/images/product3.jpg' }} />
+      <div className="row g-3">
+        <ProductCard
+          product={{
+            nombre: "Coca-Cola",
+            descripcion: "Bebida gaseosa 400ml",
+            precio_base: "3500.00",
+          }}
+        />
+        <ProductCard
+          product={{
+            nombre: "Hamburguesa clásica",
+            descripcion: "Hamburguesa con carne de res y vegetales",
+            precio_base: "2000.00",
+          }}
+        />
+        <ProductCard
+          product={{
+            nombre: "Helado de vainilla",
+            descripcion: "Helado cremoso sabor vainilla en cono",
+            precio_base: "5000.00",
+          }}
+        />
       </div>
     </div>
-  )
+  );
 }
 
 export default Home;
