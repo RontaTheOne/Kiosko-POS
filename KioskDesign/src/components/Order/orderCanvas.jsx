@@ -7,6 +7,7 @@ function OrderCanvas() {
       tabindex="-1"
       id="offcanvasBottom"
       aria-labelledby="offcanvasBottomLabel"
+      style={{ height: "auto", maxHeight: "80vh" }}
     >
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasBottomLabel">
@@ -27,7 +28,7 @@ function OrderCanvas() {
           <h5 className="text-muted">Su orden está vacía</h5>
           <p className="text-muted small">Agregue productos a su orden</p>
 
-          <div className="card mb-3">
+        <div className="card mb-3">
             <div className="card-body d-flex align-items-center gap-3">
               <img
                 src="https://www.menuspararestaurantes.com/wp-content/uploads/2022/12/promociones-en-tu-restaurante-combos2.jpg"
@@ -43,10 +44,7 @@ function OrderCanvas() {
                 <h6 className="card-title mb-1">Big King</h6>
                 <p className="text-muted small mb-2">No onion, pickle</p>
                 <div className="input-group" style={{ width: "140px" }}>
-                  <button
-                    className="btn btn-outline-danger"
-                    type="button"
-                  >
+                  <button className="btn btn-outline-danger" type="button">
                     −
                   </button>
                   <input
@@ -54,10 +52,7 @@ function OrderCanvas() {
                     className="form-control text-center"
                     value="1"
                   />
-                  <button
-                    className="btn btn-outline-danger"
-                    type="button"
-                  >
+                  <button className="btn btn-outline-danger" type="button">
                     +
                   </button>
                 </div>
@@ -68,6 +63,31 @@ function OrderCanvas() {
             </div>
           </div>
         </div>
+
+        <div className="d-flex justify-content-between align-items-center mt-3">
+              <span className="text-muted">Subtotal</span>
+              <span className="text-muted">$ 27,00</span>
+            </div>
+
+            <div className="d-flex justify-content-between align-items-center c">
+              <span className="text-muted">IVA</span>
+              <span className="text-muted">$ 5,02</span>
+            </div>
+
+            <hr></hr>
+            <div className="d-flex justify-content-between align-items-center mt-3">
+              <h4 className="text-muted">Total</h4>
+              <span className="fw-bold fs-5">$ 32,02</span>
+            </div>
+            <div className="text-center mt-4 d-flex gap-3 justify-content-center">
+              <button className="btn btn-outline-danger">
+                Pagar
+              </button>
+              <button className="btn btn-outline-danger">
+                Vaciar
+              </button>
+            </div>
+
       </div>
     </div>
   );
