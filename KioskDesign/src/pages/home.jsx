@@ -32,6 +32,7 @@ function Home() {
   return (
     <div className="container">
       <h1>Home</h1>
+      <p className="text-muted small">comer aquÍ</p>
       <p>Welcome to the Home page!</p>
       {/* Ver del productos */}
       <div className="row g-3">
