@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/Product/productCard";
 import ModalCard from "../components/Product/modalCard";
+import OrderCanvas from "../components/Order/orderCanvas";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -31,6 +32,7 @@ function Home() {
   return (
     <div className="container">
       <h1>Home</h1>
+      <p className="text-muted small"><i class="bi bi-fork-knife"></i> comer aquÍ</p>
       <p>Welcome to the Home page!</p>
       {/* Ver del productos */}
       <div className="row g-3">
@@ -44,6 +46,7 @@ function Home() {
         ))}
       </div>
 
+      <br />
       {/* Modal del producto */}
       {showModal && selectedProduct && (
         <ModalCard
@@ -51,6 +54,16 @@ function Home() {
           onClose={() => setShowModal(false)}
         />
       )}
+
+      {/* Modal del producto */}
+      <button class="btn btn-primary position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
+        <i class="bi bi-basket2-fill"></i> Ver orden
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          0
+        </span>
+        <span class="visually-hidden">unread messages</span>
+      </button>
+      <OrderCanvas />
     </div>
   );
 }

@@ -3,11 +3,11 @@ import productRoutes from "./routes/productroutes.js";
 import cors from "cors";
 
 const app = express();
-app.use(cors());
 
 // Middleware 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // Rutas
 app.get("/", (req, res) => {
