@@ -1,5 +1,6 @@
 import express from "express";
 import productRoutes from "./routes/productroutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import cors from "cors";
 
 const app = express();
@@ -16,7 +17,10 @@ app.get("/", (req, res) => {
     <p>KioskPOS ejecutandose con exito 🚀</p>
   `);
 })
+// Rutas de producto
 app.use('/producto', productRoutes);
+// Rutas de orden
+app.use('/orden', orderRoutes);
 
 // Ruta no encontrada
 app.use((req, res) => {
