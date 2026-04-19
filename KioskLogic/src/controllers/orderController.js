@@ -120,3 +120,65 @@ export const getOrderById = async (req, res) => {
     }
 }
 
+// Cambiar el estado de una orden
+export const updateOrderStatus = async (req, res) => {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    // Validar que el estado sea válido
+    const validStates = ["pendiente", "en_pago", "pagada", "cancelada"];
+    if (!validStates.includes(estado)) {
+        return res.status(400).json({ error: 'Estado de orden inválido' });
+    }
+
+    // Validar que el ID sea un número    
+    if (!id || isNaN(id)) {
+        return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
+    try {
+        const connection = await pool.getConnection();
+        // Verificar que la orden exista
+        const [orderResult] = await connection.query(
+             `SELECT estado FROM orden WHERE id_orden = $1`,
+            [id]
+        );
+
+        if (orderResult.length === 0) {
+            return res.status(404).json({ error: 'Orden no encontrada' });
+        }
+
+        const currentState = orderResult[0].estado;
+
+        if (currentState === 'cancelada') {
+            return res.status(400).json({ error: 'No se pueden cambiar el estado de una orden cancelada' });
+        }   
+
+        // Validar las transiciones de estado permitidas
+        const validTransitions = {
+            pendiente: ["en_pago", "cancelada"],
+            en_pago: ["pagada", "cancelada"],
+            pagada: [],
+            cancelada: []
+        };
+
+        if (!validTransitions[currentState].includes(estado)) {
+            return res.status(400).json({ error: 'Transición de estado no válida' });
+        }
+
+        // Actualizar el estado de la orden
+        await connection.query(
+            `UPDATE orden 
+                SET estado = $1::estado_orden_enum
+                WHERE id_orden = $2`,
+            [estado, id]
+        );
+
+        res.status(200).json({ message: 'Estado de la orden actualizado exitosamente' });
+    } catch (error) {
+        console.error('Error al actualizar el estado de la orden:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    } finally {
+        connection.release();
+    }
+}
