@@ -68,3 +68,55 @@ export const createOrder = async (req, res) => {
         connection.release();
     }
 }
+
+// Obtener orden con sus detalles
+export const getOrderById = async (req, res) => {
+    const { id } = req.params;
+    
+    // Validar que el ID sea un número
+    if (!id || isNaN(id)) {
+        return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
+    try {
+        const connection = await pool.getConnection();
+        // Obtener la orden
+        const [orderResult] = await connection.query(
+           `SELECT id_orden, tipo_orden, total, estado, fecha
+                FROM orden
+            WHERE id_orden = $1`,
+            [id]
+        );
+
+        if (orderResult.length === 0) {
+            return res.status(404).json({ error: 'Orden no encontrada' });
+        }
+
+        // Obtener los detalles de la orden
+        const order = orderResult[0];
+        // Obtener los detalles de la orden
+        const [detailsResult] = await connection.query(
+            `SELECT 
+                d.id_detalle_orden,
+                d.id_producto,
+                p.nombre,
+                d.cantidad,
+                d.precio_unitario,
+                d.subtotal
+            FROM detalle_orden d
+            INNER JOIN producto p 
+                ON p.id_producto = d.id_producto
+            WHERE d.id_orden = $1`,
+            [id]
+        );
+
+        order.detalle = detailsResult;
+        res.status(200).json(order);
+    } catch (error) {
+        console.error('Error al obtener la orden:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    } finally {
+        connection.release();
+    }
+}
+
