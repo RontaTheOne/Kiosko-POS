@@ -1,7 +1,17 @@
 import React from "react";
+import { useCart } from "../../context/cartContext";
 
-function ModalCard({ product, onClose, onAdd }) {
+function ModalCard({ product, onClose }) {
+  const { addToCart } = useCart();
+
   if (!product) return null;
+
+  const handleAdd = () => {
+  addToCart(product);
+
+  alert("Producto agregado ✅");
+  onClose();
+};
 
   return (
     <div className="modal fade show d-block text-center" tabIndex="-1" role="dialog">
@@ -25,7 +35,11 @@ function ModalCard({ product, onClose, onAdd }) {
           </div>
 
           <div className="modal-footer d-flex justify-content-center">
-            <button type="button" className="btn btn-primary" onClick={onAdd}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleAdd}
+            >
               Agregar al carrito
             </button>
           </div>

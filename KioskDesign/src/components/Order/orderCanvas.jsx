@@ -1,92 +1,164 @@
 import React from "react";
+import { useCart } from "../../context/cartContext";
 
 function OrderCanvas() {
+  const { cart, incrementQuantity, decrementQuantity, clearCart } = useCart();
+
+  const subtotal = cart.reduce((acc, product) => acc + product.precio_unitario * product.quantity, 0);
+  const iva = subtotal * 0.19;
+  const total = subtotal + iva;
+
+  const handlePay = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/orden", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          tipo_orden: "comer_aqui",
+          productos: cart.map(p => ({
+            id_producto: p.id_producto,
+            cantidad: p.quantity
+          }))
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error);
+        return;
+      }
+
+      alert("Orden creada ✅ #" + data.id_orden);
+
+      clearCart();
+      console.log(cart);
+
+    } catch (error) {
+      console.error(error);
+      alert("Error en el proceso de pago");
+    }
+  };
+
   return (
     <div
-      class="offcanvas offcanvas-bottom"
-      tabindex="-1"
+      className="offcanvas offcanvas-bottom"
+      tabIndex="-1"
       id="offcanvasBottom"
-      aria-labelledby="offcanvasBottomLabel"
       style={{ height: "auto", maxHeight: "80vh" }}
     >
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasBottomLabel">
-          Mi orden
-        </h5>
+      <div className="offcanvas-header">
+        <h1 className="offcanvas-title">Mi orden</h1>
         <button
           type="button"
-          class="btn-close text-reset"
+          className="btn-close"
           data-bs-dismiss="offcanvas"
-          aria-label="Close"
         ></button>
       </div>
-      <div class="offcanvas-body small">
-        <div className="text-center py-5">
-          <h1>
-            <i class="bi bi-basket2-fill"></i>
-          </h1>
-          <h5 className="text-muted">Su orden está vacía</h5>
-          <p className="text-muted small">Agregue productos a su orden</p>
 
-        <div className="card mb-3">
-            <div className="card-body d-flex align-items-center gap-3">
-              <img
-                src="https://www.menuspararestaurantes.com/wp-content/uploads/2022/12/promociones-en-tu-restaurante-combos2.jpg"
-                alt="Producto"
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-              <div className="flex-grow-1">
-                <h6 className="card-title mb-1">Big King</h6>
-                <p className="text-muted small mb-2">No onion, pickle</p>
-                <div className="input-group" style={{ width: "140px" }}>
-                  <button className="btn btn-outline-danger" type="button">
-                    −
-                  </button>
-                  <input
-                    type="text"
-                    className="form-control text-center"
-                    value="1"
-                  />
-                  <button className="btn btn-outline-danger" type="button">
-                    +
-                  </button>
+      <div className="offcanvas-body small">
+
+        {/* 🧠 SI EL CARRITO ESTÁ VACÍO */}
+        {cart.length === 0 ? (
+          <div className="text-center py-5">
+            <h1><i className="bi bi-basket2-fill"></i></h1>
+            <h5 className="text-muted">Su orden está vacía</h5>
+            <p className="text-muted small">Agregue productos a su orden</p>
+          </div>
+        ) : (
+
+          /* 🔥 LISTA DINÁMICA */
+          cart.map(product => (
+            <div className="card mb-3" key={product.id_producto}>
+              <div className="card-body d-flex align-items-center gap-3">
+
+                <img
+                  src={product.image || "https://via.placeholder.com/100"}
+                  alt={product.nombre}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+
+                <div className="flex-grow-1">
+                  <h6 className="card-title mb-1">{product.nombre}</h6>
+
+                  <div className="input-group" style={{ width: "140px" }}>
+                    <button
+                      className="btn btn-outline-danger"
+                      onClick={() => decrementQuantity(product.id_producto)}
+                    >
+                      −
+                    </button>
+
+                    <input
+                      type="text"
+                      className="form-control text-center"
+                      value={product.quantity}
+                      readOnly
+                    />
+
+                    <button
+                      className="btn btn-outline-success"
+                      onClick={() => incrementQuantity(product.id_producto)}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="text-end">
+                  <span className="fw-bold fs-6 text-danger">
+                    $ {(product.precio_unitario * product.quantity).toFixed(2)}
+                  </span>
                 </div>
               </div>
-              <div className="text-end">
-                <span className="fw-bold fs-6 text-danger">$ 4.10</span>
-              </div>
             </div>
-          </div>
-        </div>
+          ))
+        )}
 
-        <div className="d-flex justify-content-between align-items-center mt-3">
+        {/* PRODUCTOS */}
+        {cart.length > 0 && (
+          <>
+            <div className="d-flex justify-content-between mt-3">
               <span className="text-muted">Subtotal</span>
-              <span className="text-muted">$ 27,00</span>
+              <span>${subtotal.toFixed(2)}</span>
             </div>
 
-            <div className="d-flex justify-content-between align-items-center c">
+            <div className="d-flex justify-content-between">
               <span className="text-muted">IVA</span>
-              <span className="text-muted">$ 5,02</span>
+              <span>${iva.toFixed(2)}</span>
             </div>
 
-            <hr></hr>
-            <div className="d-flex justify-content-between align-items-center mt-3">
-              <h4 className="text-muted">Total</h4>
-              <span className="fw-bold fs-5">$ 32,02</span>
+            <hr />
+
+            <div className="d-flex justify-content-between mt-3">
+              <h4>Total</h4>
+              <span className="fw-bold fs-5">${total.toFixed(2)}</span>
             </div>
+
             <div className="text-center mt-4 d-flex gap-3 justify-content-center">
-              <button className="btn btn-outline-danger">
+              <button
+                className="btn btn-outline-danger"
+                onClick={handlePay}
+              >
                 Pagar
               </button>
-              <button className="btn btn-outline-danger">
+
+              <button
+                className="btn btn-outline-secondary"
+                onClick={clearCart}
+              >
                 Vaciar
               </button>
             </div>
+          </>
+        )}
 
       </div>
     </div>
