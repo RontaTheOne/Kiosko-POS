@@ -1,184 +1,218 @@
-import pool from '../config/db.js';
+import pool from "../config/db.js";
 
 //Crear una orden
 export const createOrder = async (req, res) => {
     const { tipo_orden, productos } = req.body;
-
-    // Validar que se hayan proporcionado los datos necesarios
-    if (!tipo_orden || !productos || !Array.isArray(productos) || productos.length === 0) {
-        return res.status(400).json({ error: 'No hay productos para crear la orden' });
+    // Validación de si hay productos en la orden
+    if (!productos || productos.length === 0) {
+        return res.status(400).json({ error: "No hay productos en la orden" });
     }
-    
-    const connection = await pool.getConnection();
+
+    const client = await pool.connect();
+
     try {
-        await connection.beginTransaction();
-        // Insertar la orden
-        const [orderResult] = await connection.query(
-             `INSERT INTO orden (tipo_orden, total, estado)
-                VALUES ($1::tipo_orden_enum, 0, 'pendiente'::estado_orden_enum)
-                    RETURNING id_orden`,
-            [tipo_orden]
+        // Ingresar orden
+        await client.query("BEGIN");
+
+        const ordenResult = await client.query(
+        `INSERT INTO orden (tipo_orden, total, estado)
+        VALUES ($1::tipo_orden_enum, 0, 'pendiente'::estado_orden_enum)
+        RETURNING id_orden`,
+        [tipo_orden],
         );
-        const orderId = orderResult[0].id_orden;
+
+        const id_orden = ordenResult.rows[0].id_orden;
+
         let total = 0;
-
-        // Insertar los productos de la orden
+        // Procesar cada producto de la orden
         for (const item of productos) {
-            const { id_producto, cantidad } = item;
-            // Obtener el precio del producto para calcular el subtotal
-            const [productResult] = await connection.query(
-                `SELECT precio FROM producto WHERE id_producto = $1`,
-                [id_producto]
-            );
+        const { id_producto, cantidad } = item;
 
-            if (productResult.length === 0) {
-                throw new Error(`Producto con id ${id_producto} no encontrado`);
-            }
-            // Calcular el subtotal para este producto y acumular el total
-            let subtotal = 0;
-            const precio = productResult[0].precio;
-            subtotal += precio * cantidad;
-            total += subtotal;
+        // Validar producto
+        const productoDB = await client.query(
+            `SELECT precio_base FROM producto WHERE id_producto = $1`,
+            [id_producto],
+        );
 
-            // Insertar el detalle de la orden
-            await connection.query(
-                `INSERT INTO detalle_orden 
-                    (id_orden, id_producto, cantidad, precio_unitario, subtotal)
-                VALUES ($1, $2, $3, $4, $5)`,
-                [orderId, id_producto, cantidad, precio, subtotal]
+        if (productoDB.rows.length === 0) {
+            throw new Error(`Producto ${id_producto} no existe`);
+        }
+
+        // Calcular IVA, subtotal y total
+        const precio = Number(productoDB.rows[0].precio_base);
+        const subtotal = precio * cantidad;
+        const iva = subtotal * 0.19;
+        total += subtotal + iva;
+
+        // Validaciones de precios, totales y cantidades
+        if (!precio || isNaN(precio)) {
+            throw new Error(
+            `Precio no es un número válido para producto ${id_producto}`,
             );
         }
-        // Redondear a 2 decimales
-        total = parseFloat(total.toFixed(2));
 
-        // Actualizar el total de la orden
-        await connection.query(
-            `UPDATE orden SET total = $1 WHERE id_orden = $2`,
-            [total, orderId]
+        if (isNaN(total)) {
+            throw new Error(
+            `Total no es un número válido para producto ${id_producto}`,
+            );
+        }
+
+        if (total < 0) {
+            throw new Error(
+            `Total no puede ser negativo para producto ${id_producto}`,
+            );
+        }
+
+        // Insertar detalle de orden
+        await client.query(
+            `INSERT INTO detalle_orden 
+            (id_orden, id_producto, cantidad, precio_unitario, subtotal)
+            VALUES ($1, $2, $3, $4, $5)`,
+            [id_orden, id_producto, cantidad, precio, subtotal],
         );
+        }
 
-        // Confirmar la orden
-        await connection.commit();
-        res.status(201).json({ message: 'Orden creada exitosamente', id_orden: orderId });
-    } catch (error) {
-        await connection.rollback();
-        console.error('Error al crear la orden:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        // Redondeo correcto a 2 decimales
+        total = Number(total.toFixed(2));
+
+        await client.query(`UPDATE orden SET total = $1 WHERE id_orden = $2`, [
+        total,
+        id_orden,
+        ]);
+
+        await client.query("COMMIT");
+
+        res.status(201).json({
+        message: "Orden creada",
+        id_orden,
+        total,
+        });
+    }catch (error) {
+        await client.query("ROLLBACK");
+        console.error("ERROR POSTGRES:", error.message);
+
+        res.status(500).json({
+        error: "Error al crear la orden",
+        detalle: error.message,
+    });
     } finally {
-        connection.release();
+        client.release();
     }
-}
+};
 
 // Obtener orden con sus detalles
 export const getOrderById = async (req, res) => {
-    const { id } = req.params;
-    
-    // Validar que el ID sea un número
-    if (!id || isNaN(id)) {
-        return res.status(400).json({ error: 'ID de orden inválido' });
+  const { id } = req.params;
+
+  // Validación básica
+  if (!id || isNaN(id)) {
+    return res.status(400).json({ error: "ID inválido" });
+  }
+
+  try {
+    // 🧾 Obtener orden
+    const ordenResult = await pool.query(
+      `SELECT id_orden, tipo_orden, total, estado, fecha
+       FROM orden
+       WHERE id_orden = $1`,
+      [id],
+    );
+
+    if (ordenResult.rows.length === 0) {
+      return res.status(404).json({ error: "Orden no encontrada" });
     }
 
-    try {
-        const connection = await pool.getConnection();
-        // Obtener la orden
-        const [orderResult] = await connection.query(
-           `SELECT id_orden, tipo_orden, total, estado, fecha
-                FROM orden
-            WHERE id_orden = $1`,
-            [id]
-        );
+    // 📦 Obtener detalle con JOIN (PostgreSQL style)
+    const detalleResult = await pool.query(
+      `SELECT 
+          d.id_detalle_orden,
+          d.id_producto,
+          p.nombre,
+          d.cantidad,
+          d.precio_unitario,
+          d.subtotal
+       FROM detalle_orden d
+       INNER JOIN producto p 
+         ON p.id_producto = d.id_producto
+       WHERE d.id_orden = $1`,
+      [id],
+    );
 
-        if (orderResult.length === 0) {
-            return res.status(404).json({ error: 'Orden no encontrada' });
-        }
+    res.json({
+      ...ordenResult.rows[0],
+      detalles: detalleResult.rows,
+    });
+  } catch (error) {
+    console.error("ERROR GET ORDER:", error.message);
 
-        // Obtener los detalles de la orden
-        const order = orderResult[0];
-        // Obtener los detalles de la orden
-        const [detailsResult] = await connection.query(
-            `SELECT 
-                d.id_detalle_orden,
-                d.id_producto,
-                p.nombre,
-                d.cantidad,
-                d.precio_unitario,
-                d.subtotal
-            FROM detalle_orden d
-            INNER JOIN producto p 
-                ON p.id_producto = d.id_producto
-            WHERE d.id_orden = $1`,
-            [id]
-        );
-
-        order.detalle = detailsResult;
-        res.status(200).json(order);
-    } catch (error) {
-        console.error('Error al obtener la orden:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    } finally {
-        connection.release();
-    }
-}
+    res.status(500).json({
+      error: "Error al obtener la orden",
+      detalle: error.message,
+    });
+  }
+};
 
 // Cambiar el estado de una orden
 export const updateOrderStatus = async (req, res) => {
-    const { id } = req.params;
-    const { estado } = req.body;
+  const { id } = req.params;
+  const { estado } = req.body;
 
-    // Validar que el estado sea válido
-    const validStates = ["pendiente", "en_pago", "pagada", "cancelada"];
-    if (!validStates.includes(estado)) {
-        return res.status(400).json({ error: 'Estado de orden inválido' });
+  const estadosValidos = ["pendiente", "en_pago", "pagada", "cancelada"];
+
+    if (!id || isNaN(id)) {
+        return res.status(400).json({ error: "ID inválido" });
     }
 
-    // Validar que el ID sea un número    
-    if (!id || isNaN(id)) {
-        return res.status(400).json({ error: 'ID de orden inválido' });
+    if (!estadosValidos.includes(estado)) {
+        return res.status(400).json({ error: "Estado inválido" });
     }
 
     try {
-        const connection = await pool.getConnection();
-        // Verificar que la orden exista
-        const [orderResult] = await connection.query(
-             `SELECT estado FROM orden WHERE id_orden = $1`,
-            [id]
+        // 🔍 Obtener estado actual
+        const result = await pool.query(
+        `SELECT estado FROM orden WHERE id_orden = $1`,
+        [id],
         );
 
-        if (orderResult.length === 0) {
-            return res.status(404).json({ error: 'Orden no encontrada' });
+        if (result.rows.length === 0) {
+        return res.status(404).json({ error: "Orden no encontrada" });
         }
 
-        const currentState = orderResult[0].estado;
+        const estadoActual = result.rows[0].estado;
 
-        if (currentState === 'cancelada') {
-            return res.status(400).json({ error: 'No se pueden cambiar el estado de una orden cancelada' });
-        }   
-
-        // Validar las transiciones de estado permitidas
-        const validTransitions = {
-            pendiente: ["en_pago", "cancelada"],
-            en_pago: ["pagada", "cancelada"],
-            pagada: [],
-            cancelada: []
+        // 🔥 Validar flujo lógico (muy importante)
+        const transicionesValidas = {
+        pendiente: ["en_pago", "cancelada"],
+        en_pago: ["pagada", "cancelada"],
+        pagada: [],
+        cancelada: [],
         };
 
-        if (!validTransitions[currentState].includes(estado)) {
-            return res.status(400).json({ error: 'Transición de estado no válida' });
+        if (!transicionesValidas[estadoActual].includes(estado)) {
+        return res.status(400).json({
+            error: `No se puede cambiar de ${estadoActual} a ${estado}`,
+        });
         }
 
-        // Actualizar el estado de la orden
-        await connection.query(
-            `UPDATE orden 
-                SET estado = $1::estado_orden_enum
-                WHERE id_orden = $2`,
-            [estado, id]
+        // 🔥 Update con ENUM en PostgreSQL
+        await pool.query(
+        `UPDATE orden 
+        SET estado = $1::estado_orden_enum
+        WHERE id_orden = $2`,
+        [estado, id],
         );
 
-        res.status(200).json({ message: 'Estado de la orden actualizado exitosamente' });
+        res.json({
+        message: "Estado actualizado correctamente",
+        estado_anterior: estadoActual,
+        nuevo_estado: estado,
+        });
     } catch (error) {
-        console.error('Error al actualizar el estado de la orden:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    } finally {
-        connection.release();
+        console.error("ERROR UPDATE STATUS:", error.message);
+
+        res.status(500).json({
+        error: "Error al actualizar estado",
+        detalle: error.message,
+        });
     }
-}
+};

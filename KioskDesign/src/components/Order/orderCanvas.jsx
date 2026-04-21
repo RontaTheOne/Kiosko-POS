@@ -19,7 +19,8 @@ function OrderCanvas() {
           tipo_orden: "comer_aqui",
           productos: cart.map(p => ({
             id_producto: p.id_producto,
-            cantidad: p.quantity
+            cantidad: p.quantity,
+
           }))
         })
       });
@@ -38,6 +39,7 @@ function OrderCanvas() {
 
     } catch (error) {
       console.error(error);
+      console.log(cart);
       alert("Error en el proceso de pago");
     }
   };

@@ -11,10 +11,12 @@ function ModalCard({ product, onClose }) {
   addToCart(product);
 
     Swal.fire({
-    title: "Producto agregado a la orden",
-    text: "El producto ha sido agregado correctamente.",
-    icon: "success"
-  });
+      icon: "success",
+      title: "Producto agregado a la orden",
+      text: "El producto ha sido agregado correctamente.",
+      showConfirmButton: false,
+      timer: 2000
+    });
   onClose();
 };
 
