@@ -1,7 +1,24 @@
-import React from "react";
 
-function ModalCard({ product, onClose, onAdd }) {
+import Swal from "sweetalert2";
+import { useCart } from "../../context/cartContext";
+
+function ModalCard({ product, onClose }) {
+  const { addToCart } = useCart();
+
   if (!product) return null;
+
+  const handleAdd = () => {
+  addToCart(product);
+
+    Swal.fire({
+      icon: "success",
+      title: "Producto agregado a la orden",
+      text: "El producto ha sido agregado correctamente.",
+      showConfirmButton: false,
+      timer: 2000
+    });
+  onClose();
+};
 
   return (
     <div className="modal fade show d-block text-center" tabIndex="-1" role="dialog">
@@ -25,7 +42,11 @@ function ModalCard({ product, onClose, onAdd }) {
           </div>
 
           <div className="modal-footer d-flex justify-content-center">
-            <button type="button" className="btn btn-primary" onClick={onAdd}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleAdd}
+            >
               Agregar al carrito
             </button>
           </div>
