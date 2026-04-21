@@ -1,4 +1,5 @@
-import React from "react";
+
+import Swal from "sweetalert2";
 import { useCart } from "../../context/cartContext";
 
 function ModalCard({ product, onClose }) {
@@ -9,7 +10,11 @@ function ModalCard({ product, onClose }) {
   const handleAdd = () => {
   addToCart(product);
 
-  alert("Producto agregado ✅");
+    Swal.fire({
+    title: "Producto agregado a la orden",
+    text: "El producto ha sido agregado correctamente.",
+    icon: "success"
+  });
   onClose();
 };
 

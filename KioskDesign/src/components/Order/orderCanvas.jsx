@@ -2,7 +2,7 @@ import React from "react";
 import { useCart } from "../../context/cartContext";
 
 function OrderCanvas() {
-  const { cart, incrementQuantity, decrementQuantity, clearCart } = useCart();
+  const { cart, incrementQuantity, decrementQuantity, clearCart, removeFromCart} = useCart();
 
   const subtotal = cart.reduce((acc, product) => acc + product.precio_unitario * product.quantity, 0);
   const iva = subtotal * 0.19;
@@ -116,6 +116,11 @@ function OrderCanvas() {
                   <span className="fw-bold fs-6 text-danger">
                     $ {(product.precio_unitario * product.quantity).toFixed(2)}
                   </span>
+                </div>
+                <div className="text-end">
+                   <button type="button" class="btn btn-outline-danger" onClick={() => removeFromCart(product)}>
+                    <i class="bi bi-trash3-fill lg"></i>
+                  </button>
                 </div>
               </div>
             </div>
