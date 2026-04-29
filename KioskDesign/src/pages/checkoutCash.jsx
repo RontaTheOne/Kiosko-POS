@@ -11,6 +11,7 @@ function CheckoutCash() {
         <div className="card-body">
             <div className="text-center align-items-center mb-4">  
                 <h1 className="card-title mt-3">Pago en efectivo</h1>
+                <br />
                 <QRCodeCanvas value={123} size={200} />
                 < h5 className="card-title mt-3">Escanea el código QR para pagar en efectivo</h5>
                 <p className="card-text">Una vez que hayas escaneado el código QR, dirígete a caja para completar el pago.</p>
