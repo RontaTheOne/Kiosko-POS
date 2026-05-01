@@ -180,7 +180,7 @@ export const updateOrderStatus = async (req, res) => {
 
         const estadoActual = result.rows[0].estado;
 
-        // 🔥 Validar flujo lógico (muy importante)
+        //Validar flujo lógico (muy importante)
         const transicionesValidas = {
         pendiente: ["en_pago", "cancelada"],
         en_pago: ["pagada", "cancelada"],

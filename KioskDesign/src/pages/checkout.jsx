@@ -1,7 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
+
 function Checkout() {
+  // Estado para métodos de pago
+  const [methods, setMethods] = useState([]);
+  // Hook de navegación
   const navigate = useNavigate();
+
+  {/* Fetch de métodos de pago */}
+  useEffect(() => {
+    fetch("http://localhost:3000/metodo-pago")
+      .then (res => res.json())
+      .then (data => setMethods(data))
+  }, []);
+
   return (
     <div className="container">
       <br /><br />
@@ -25,12 +39,15 @@ function Checkout() {
           <div className="text-center align-items-center">
             <h6 className="mb-2">Select Payment Method</h6>
             <div className="d-flex gap-2 justify-content-center mb-3">
-              <button className="btn btn-primary" type="button">
-                Efectivo
-              </button>
-              <button className="btn btn-primary" type="button">
-                Tarjeta
-              </button>
+              {methods.map((method) => (
+                <button
+                  key={method.id_metodo_pago}
+                  className="btn btn-primary"
+                  type="button"
+                >
+                  {method.nombre}
+                </button>
+              ))}
             </div>
           </div>
 

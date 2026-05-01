@@ -1,6 +1,7 @@
 import express from "express";
 import productRoutes from "./routes/productroutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import methodsRoutes from "./routes/methodsRoutes.js";
 import cors from "cors";
 
 const app = express();
@@ -21,6 +22,8 @@ app.get("/", (req, res) => {
 app.use('/producto', productRoutes);
 // Rutas de orden
 app.use('/orden', orderRoutes);
+// Rutas de métodos de pago
+app.use('/metodo-pago', methodsRoutes);
 
 // Ruta no encontrada
 app.use((req, res) => {
