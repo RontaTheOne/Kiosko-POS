@@ -2,7 +2,16 @@ import React from "react";
 import { useCart } from "../../context/cartContext";
 
 function OrderCanvas() {
-  const { cart, incrementQuantity, decrementQuantity, clearCart, removeFromCart} = useCart();
+  const { cart, incrementQuantity, decrementQuantity, clearCart, removeFromCart, tipoOrden } = useCart();
+
+  const orderLabel =
+    tipoOrden === "comer_aqui"
+      ? "Comer aquí"
+      : tipoOrden === "llevar" || tipoOrden === "para_llevar"
+      ? "Para llevar"
+      : tipoOrden;
+
+  const orderIcon = tipoOrden === "comer_aqui" ? "bi bi-fork-knife" : "bi bi-bag-fill";
 
   const subtotal = cart.reduce((acc, product) => acc + product.precio_unitario * product.quantity, 0);
   const iva = subtotal * 0.19;
@@ -16,7 +25,7 @@ function OrderCanvas() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          tipo_orden: "comer_aqui",
+          tipo_orden: tipoOrden,
           productos: cart.map(p => ({
             id_producto: p.id_producto,
             cantidad: p.quantity,
@@ -51,8 +60,16 @@ function OrderCanvas() {
       id="offcanvasBottom"
       style={{ height: "auto", maxHeight: "80vh" }}
     >
-      <div className="offcanvas-header">
-        <h1 className="offcanvas-title">Mi orden</h1>
+      <div className="offcanvas-header d-flex align-items-center justify-content-between gap-3">
+        <div>
+          <h1 className="offcanvas-title">Mi orden</h1>
+          <div className="d-flex align-items-center gap-2 mt-1">
+            <i className={orderIcon}></i>
+            <span className={`badge ${tipoOrden === "comer_aqui" ? "bg-danger text-white" : "bg-danger text-white"} text-uppercase py-2 px-3 fs-7 fw-semibold`}>
+              {orderLabel}
+            </span>
+          </div>
+        </div>
         <button
           type="button"
           className="btn-close"
@@ -62,7 +79,7 @@ function OrderCanvas() {
 
       <div className="offcanvas-body small">
 
-        {/* 🧠 SI EL CARRITO ESTÁ VACÍO */}
+        {/* Orden vacía */}
         {cart.length === 0 ? (
           <div className="text-center py-5">
             <h1><i className="bi bi-basket2-fill"></i></h1>
@@ -71,7 +88,7 @@ function OrderCanvas() {
           </div>
         ) : (
 
-          /* 🔥 LISTA DINÁMICA */
+          /* Orden dinamica */
           cart.map(product => (
             <div className="card mb-3" key={product.id_producto}>
               <div className="card-body d-flex align-items-center gap-3">
@@ -120,8 +137,8 @@ function OrderCanvas() {
                   </span>
                 </div>
                 <div className="text-end">
-                   <button type="button" class="btn btn-outline-danger" onClick={() => removeFromCart(product)}>
-                    <i class="bi bi-trash3-fill lg"></i>
+                   <button type="button" className="btn btn-outline-danger" onClick={() => removeFromCart(product)}>
+                    <i className="bi bi-trash3-fill lg"></i>
                   </button>
                 </div>
               </div>

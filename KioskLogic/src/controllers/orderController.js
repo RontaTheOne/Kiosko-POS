@@ -110,7 +110,7 @@ export const getOrderById = async (req, res) => {
   }
 
   try {
-    // 🧾 Obtener orden
+    // Obtener orden
     const ordenResult = await pool.query(
       `SELECT id_orden, tipo_orden, total, estado, fecha
        FROM orden
@@ -122,7 +122,7 @@ export const getOrderById = async (req, res) => {
       return res.status(404).json({ error: "Orden no encontrada" });
     }
 
-    // 📦 Obtener detalle con JOIN (PostgreSQL style)
+    // Obtener detalle con JOIN (PostgreSQL style)
     const detalleResult = await pool.query(
       `SELECT 
           d.id_detalle_orden,
@@ -168,7 +168,7 @@ export const updateOrderStatus = async (req, res) => {
     }
 
     try {
-        // 🔍 Obtener estado actual
+        // Obtener estado actual
         const result = await pool.query(
         `SELECT estado FROM orden WHERE id_orden = $1`,
         [id],
@@ -194,7 +194,7 @@ export const updateOrderStatus = async (req, res) => {
         });
         }
 
-        // 🔥 Update con ENUM en PostgreSQL
+        // Update con ENUM en PostgreSQL
         await pool.query(
         `UPDATE orden 
         SET estado = $1::estado_orden_enum
