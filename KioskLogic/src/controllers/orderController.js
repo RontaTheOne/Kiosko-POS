@@ -85,6 +85,7 @@ export const createOrder = async (req, res) => {
         res.status(201).json({
         message: "Orden creada",
         id_orden,
+        estado: "pendiente",
         total,
         });
     }catch (error) {

@@ -12,10 +12,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<StartScreen />} />
-        <Route path="/Checkout" element={<Checkout />} />
-        <Route path="/PayCash" element={<PayCash />} />
+        <Route path="/Pago" element={<Checkout />} />
+        <Route path="/Pago/Efectivo/:id" element={<PayCash />} />
         <Route path="/Home" element={<Home />} />
-        <Route path="/OrderType" element={<OrderType />} />
+        <Route path="/Tipo_Orden" element={<OrderType />} />
         <Route path="*" element={<StartScreen />} />
       </Routes>
     </BrowserRouter>

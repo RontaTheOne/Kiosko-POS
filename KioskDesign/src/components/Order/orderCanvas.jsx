@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/cartContext";
 
 function OrderCanvas() {
   const { cart, incrementQuantity, decrementQuantity, clearCart, removeFromCart, tipoOrden } = useCart();
+  const navigate = useNavigate();
 
   const orderLabel =
     tipoOrden === "comer_aqui"
@@ -45,6 +47,13 @@ function OrderCanvas() {
 
       clearCart();
       console.log(cart);
+
+      navigate(`/Pago`, 
+        { 
+          state: { 
+            order: data
+           } 
+      });
 
     } catch (error) {
       console.error(error);
