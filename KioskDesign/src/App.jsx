@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<StartScreen />} />
         <Route path="/Pago" element={<Checkout />} />
-        <Route path="/Pago/Efectivo/:id" element={<PayCash />} />
+        <Route path="/Pago/Efectivo/:id_pago" element={<PayCash />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/Tipo_Orden" element={<OrderType />} />
         <Route path="*" element={<StartScreen />} />

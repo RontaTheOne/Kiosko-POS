@@ -1,10 +1,11 @@
 import { Router } from "express";
-import {processPayment,confirmCashPayment} from "../controllers/paymentController.js";
+import {processPayment,getPaymentInfo} from "../controllers/paymentController.js";
 
 const router = Router();
-// Crear pago
+
+// crear pago
 router.post("/:id_orden", processPayment);
-// Confirmar efectivo
-router.post("/efectivo/:id_pago", confirmCashPayment);
+// obtener info pago
+router.get("/:id_pago", getPaymentInfo);
 
 export default router;

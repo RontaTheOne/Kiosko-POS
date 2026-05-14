@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {useEffect,useState} from "react";
+import {useNavigate,useLocation} from "react-router-dom";
 
 function Checkout() {
-
   const navigate = useNavigate();
   const location = useLocation();
-
-  // ORDEN DESDE NAVEGACIÓN O SESSION STORAGE
+  // orden
   const [order] = useState(() => {
-    if (location.state && location.state.order) {
+
+    if (
+      location.state &&
+      location.state.order
+    ) {
+
       return location.state.order;
     }
-    const stored = sessionStorage.getItem("order");
-    return stored ? JSON.parse(stored) : null;
+
+    const stored =
+      sessionStorage.getItem("order");
+
+    return stored
+      ? JSON.parse(stored)
+      : null;
   });
 
-  // 🔥 MÉTODOS DE PAGO
-  const [methods, setMethods] = useState([]);
+  // métodos
+  const [methods, setMethods] =
+    useState([]);
 
-  // 🔥 GUARDAR ORDEN EN SESSION
+  // guardar orden
   useEffect(() => {
 
     if (order) {
@@ -31,80 +40,86 @@ function Checkout() {
 
   }, [order]);
 
-  // 🔥 TRAER MÉTODOS DE PAGO
+  // métodos de pago
   useEffect(() => {
 
-    fetch("http://localhost:3000/metodo-pago")
+    fetch(
+      "http://localhost:3000/metodo-pago"
+    )
       .then(res => res.json())
       .then(data => setMethods(data))
-      .catch(error => console.error(error));
+      .catch(error =>
+        console.error(error)
+      );
 
   }, []);
 
-  // 💳 CREAR PAGO
-  const handlePayment = async (method) => {
+  // 💳 crear pago
+  const handlePayment =
+    async (method) => {
 
-    // protección
-    if (!order) return;
+      if (!order) return;
 
-    try {
+      try {
 
-      const res = await fetch(
-        `http://localhost:3000/pago/${order.id_orden}`,
-        {
-          method: "POST",
+        const res = await fetch(
+          `http://localhost:3000/pago/${order.id_orden}`,
+          {
 
-          headers: {
-            "Content-Type": "application/json"
-          },
+            method: "POST",
 
-          body: JSON.stringify({
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-            id_metodo_pago:
-              method.id_metodo_pago,
+            body: JSON.stringify({
 
-            monto:
-              order.total
+              id_metodo_pago:
+                method.id_metodo_pago,
 
-          })
+              monto:
+                order.total
+
+            })
+          }
+        );
+
+        const data =
+          await res.json();
+
+        console.log(data);
+
+        // efectivo
+        if (
+          data.nombre === "efectivo"
+        ) {
+
+          navigate(
+            `/pago/efectivo/${data.pago.id_pago}`
+          );
         }
-      );
 
-      const data = await res.json();
+      } catch (error) {
 
-      console.log(data);
-
-      // 💵 EFECTIVO
-      if (data.nombre === "efectivo") {
-
-        navigate(
-          `/pago/efectivo/${data.pago.id_pago}`
+        console.error(
+          "Error procesando pago:",
+          error
         );
       }
+    };
 
-    } catch (error) {
-
-      console.error(
-        "Error procesando pago:",
-        error
-      );
-    }
-  };
-
-  // SIN ORDEN
+  // sin orden
   if (!order) {
 
     return (
+
       <div className="container text-center mt-5">
 
         <div
           className="spinner-border text-danger"
           role="status"
-        >
-          <span className="visually-hidden">
-            Loading...
-          </span>
-        </div>
+        />
 
         <h5 className="mt-3">
           No hay orden activa
@@ -124,16 +139,14 @@ function Checkout() {
       <div className="card shadow">
 
         <div className="card-body">
+
           <h3 className="text-center mb-4">
-            Resumen de tu orden
+            Order Summary
           </h3>
 
-          {/* 🆔 ORDEN */}
           <div className="d-flex justify-content-between mb-2">
 
-            <span>
-              Orden
-            </span>
+            <span>Orden</span>
 
             <strong>
               #{order.id_orden}
@@ -141,16 +154,13 @@ function Checkout() {
 
           </div>
 
-          {/* 📦 ESTADO */}
           <div className="d-flex justify-content-between mb-2">
 
-            <span>
-              Estado
-            </span>
+            <span>Estado</span>
 
             <span className="badge text-bg-warning">
 
-              {order.estado || "pendiente"}
+              {order.estado}
 
             </span>
 
@@ -158,20 +168,17 @@ function Checkout() {
 
           <hr />
 
-          {/* 💰 TOTAL */}
           <div className="d-flex justify-content-between mb-3">
 
-            <span>
-              Total a pagar:
-            </span>
+            <span>Total Amount:</span>
 
             <strong>
-             {Number(order.total).toLocaleString("es-CO")} COP
+              {order.total} COP
             </strong>
 
           </div>
 
-          {/* 💳 MÉTODOS */}
+          {/* métodos */}
           <div className="text-center">
 
             <h5 className="mb-3">
@@ -183,13 +190,19 @@ function Checkout() {
               {methods.map(method => (
 
                 <button
-                  key={method.id_metodo_pago}
+                  key={
+                    method.id_metodo_pago
+                  }
+
                   className="btn btn-primary"
+
                   onClick={() =>
                     handlePayment(method)
                   }
                 >
+
                   {method.nombre}
+
                 </button>
 
               ))}
@@ -197,7 +210,6 @@ function Checkout() {
             </div>
           </div>
 
-          {/* 🔙 REGRESAR */}
           <button
             className="btn btn-secondary w-100 mt-4"
             onClick={() => navigate(-1)}
