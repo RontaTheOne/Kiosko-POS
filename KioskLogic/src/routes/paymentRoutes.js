@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {processPayment,getPaymentInfo} from "../controllers/paymentController.js";
+import {processPayment,getPaymentInfo, processCardPayment} from "../controllers/paymentController.js";
 
 const router = Router();
 
@@ -7,5 +7,6 @@ const router = Router();
 router.post("/:id_orden", processPayment);
 // obtener info pago
 router.get("/:id_pago", getPaymentInfo);
-
+//Pagar con tarjeta
+router.put("/tarjeta/:id_pago", processCardPayment);
 export default router;

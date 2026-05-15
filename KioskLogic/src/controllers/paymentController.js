@@ -134,3 +134,72 @@ export const getPaymentInfo = async (req, res) => {
   }
 };
 
+// Pago con tarjeta
+export const processCardPayment = async (req, res) => {
+
+  try {
+
+    const { id_pago } = req.params;
+
+    // simulación aprobación bancaria
+    const approved =
+      Math.random() > 0.15;
+
+    // pago rechazado
+    if (!approved) {
+
+      await pool.query(
+        `
+        UPDATE pago
+        SET estado_pago = 'rechazado'
+        WHERE id_pago = $1
+        `,
+        [id_pago]
+      );
+
+      return res.status(400).json({
+        success: false,
+        estado: "rechazado",
+        message: "Pago rechazado por el banco"
+      });
+    }
+
+    // aprobar pago
+    await pool.query(
+      `
+      UPDATE pago
+      SET estado_pago = 'aprobado'
+      WHERE id_pago = $1
+      `,
+      [id_pago]
+    );
+
+    // actualizar orden
+    await pool.query(
+      `
+      UPDATE orden
+      SET estado = 'pagada'
+      WHERE id_orden = (
+        SELECT id_orden
+        FROM pago
+        WHERE id_pago = $1
+      )
+      `,
+      [id_pago]
+    );
+
+    res.json({
+      success: true,
+      estado: "aprobado",
+      message: "Pago aprobado"
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      error: "Error procesando pago tarjeta"
+    });
+  }
+};

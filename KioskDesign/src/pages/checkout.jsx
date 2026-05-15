@@ -1,9 +1,21 @@
-import React, {useEffect,useState} from "react";
-import {useNavigate,useLocation} from "react-router-dom";
+import React, {
+  useEffect,
+  useState
+} from "react";
+
+import {
+  useNavigate,
+  useLocation
+} from "react-router-dom";
+
+import ModalPaymentCard from "../components/payment/modalPaymentCard";
 
 function Checkout() {
+
   const navigate = useNavigate();
+
   const location = useLocation();
+
   // orden
   const [order] = useState(() => {
 
@@ -26,6 +38,14 @@ function Checkout() {
   // métodos
   const [methods, setMethods] =
     useState([]);
+
+  // loading tarjeta
+  const [processingCard,
+    setProcessingCard] =
+    useState(false);
+  const [paymentStatus,
+    setPaymentStatus] =
+    useState(null);
 
   // guardar orden
   useEffect(() => {
@@ -54,7 +74,15 @@ function Checkout() {
 
   }, []);
 
-  // 💳 crear pago
+  // delay
+  const delay = (ms) => {
+
+    return new Promise(resolve =>
+      setTimeout(resolve, ms)
+    );
+  };
+
+  // crear pago
   const handlePayment =
     async (method) => {
 
@@ -62,6 +90,7 @@ function Checkout() {
 
       try {
 
+        // crear pago
         const res = await fetch(
           `http://localhost:3000/pago/${order.id_orden}`,
           {
@@ -98,6 +127,51 @@ function Checkout() {
           navigate(
             `/pago/efectivo/${data.pago.id_pago}`
           );
+        }
+
+        // tarjeta
+        if (
+          data.nombre === "tarjeta"
+        ) {
+
+          setProcessingCard(true);
+          setPaymentStatus(null);
+
+          // simulación datafono
+          await delay(2500);
+
+          const paymentRes =
+            await fetch(
+              `http://localhost:3000/pago/tarjeta/${data.pago.id_pago}`,
+              {
+                method: "PUT"
+              }
+            );
+
+          const paymentData =
+            await paymentRes.json();
+
+          console.log(paymentData);
+
+          setProcessingCard(false);
+
+          if (
+            paymentData.success
+          ) {
+            setPaymentStatus({
+              success: true,
+              title: "Pago aprobado por el banco",
+              description:
+                "Su pago ha sido autorizado exitosamente."
+            });
+          } else {
+            setPaymentStatus({
+              success: false,
+              title: "Pago rechazado",
+              description:
+                "El banco no pudo autorizar el pago. Intente con otra tarjeta o método."
+            });
+          }
         }
 
       } catch (error) {
@@ -196,6 +270,10 @@ function Checkout() {
 
                   className="btn btn-primary"
 
+                  disabled={
+                    processingCard
+                  }
+
                   onClick={() =>
                     handlePayment(method)
                   }
@@ -210,8 +288,19 @@ function Checkout() {
             </div>
           </div>
 
+          {/* modal datafono */}
+          {(processingCard || paymentStatus) && (
+            <ModalPaymentCard
+              processingCard={processingCard}
+              paymentStatus={paymentStatus}
+              onClose={() => setPaymentStatus(null)}
+              onFinish={() => navigate("/")}
+            />
+          )}
+
           <button
             className="btn btn-secondary w-100 mt-4"
+            disabled={processingCard}
             onClick={() => navigate(-1)}
           >
             Regresar
@@ -220,6 +309,8 @@ function Checkout() {
         </div>
       </div>
     </div>
+
+    
   );
 }
 
