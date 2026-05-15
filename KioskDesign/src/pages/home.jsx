@@ -1,10 +1,11 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useInactivityRedirect } from "../hooks/useInactivityRedirect";
 import ProductCard from "../components/Product/productCard";
 import ModalCard from "../components/Product/modalCard";
 import OrderCanvas from "../components/Order/orderCanvas";
 
 function Home() {
+  useInactivityRedirect("/");
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -55,12 +56,12 @@ function Home() {
       )}
 
       {/* Modal del producto */}
-      <button class="btn btn-primary position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
-        <i class="bi bi-basket2-fill"></i> Ver orden
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      <button className="btn btn-primary position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
+        <i className="bi bi-basket2-fill"></i> Ver orden
+        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           0
         </span>
-        <span class="visually-hidden">unread messages</span>
+        <span className="visually-hidden">unread messages</span>
       </button>
       <OrderCanvas />
     </div>
