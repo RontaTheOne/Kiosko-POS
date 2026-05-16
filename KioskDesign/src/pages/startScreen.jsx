@@ -10,7 +10,7 @@ function StartScreen() {
         <p className="lead mb-4">
           Haz tu pedido en segundos. Elige tú comida, personaliza y paga.
         </p>
-        <Link to="/OrderType" className="btn btn-outline-primary">
+        <Link to="/Tipo_Orden" className="btn btn-outline-primary">
           Empezar
         </Link>
 

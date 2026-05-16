@@ -1,6 +1,8 @@
 import express from "express";
 import productRoutes from "./routes/productroutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import methodsRoutes from "./routes/methodsRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 import cors from "cors";
 
 const app = express();
@@ -21,7 +23,10 @@ app.get("/", (req, res) => {
 app.use('/producto', productRoutes);
 // Rutas de orden
 app.use('/orden', orderRoutes);
-
+// Rutas de métodos de pago
+app.use('/metodo-pago', methodsRoutes);
+// Rutas de pago
+app.use('/pago', paymentRoutes);
 // Ruta no encontrada
 app.use((req, res) => {
   res.status(404).send(`

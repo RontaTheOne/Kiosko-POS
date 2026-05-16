@@ -7,6 +7,7 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+ const [tipoOrden, setTipoOrden] = useState("comer_aqui");
   // Agregar un producto al carrito
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -74,6 +75,8 @@ export const CartProvider = ({ children }) => {
         incrementQuantity,
         decrementQuantity,
         clearCart,
+        tipoOrden,
+        setTipoOrden,
       }}
     >
       {children}
