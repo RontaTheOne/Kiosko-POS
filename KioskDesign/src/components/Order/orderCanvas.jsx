@@ -46,15 +46,18 @@ function OrderCanvas() {
         return;
       }
 
-      alert("Orden creada ✅ #" + data.id_orden);
-
       clearCart();
       console.log(cart);
+
+      const productCount = cart.reduce(
+        (acc, product) => acc + (Number(product.quantity) || 0),
+        0
+      );
 
       navigate(`/Pago`, 
         { 
           state: { 
-            order: data
+            order: { ...data, productCount }
            } 
       });
 
