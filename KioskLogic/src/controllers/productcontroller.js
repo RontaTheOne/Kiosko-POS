@@ -32,3 +32,57 @@ export const getProductById = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener el producto' });
   }
 };
+
+export const getCategories = async (req, res) => {
+  try {
+
+    const result = await pool.query(`
+      SELECT
+        id_categoria,
+        nombre
+      FROM categorias
+      ORDER BY nombre ASC
+    `);
+
+    res.json(result.rows);
+
+  } catch (err) {
+
+    console.error("Error:", err);
+
+    res.status(500).json({
+      error: "Error al obtener las categorias categorías"
+    });
+
+  }
+};
+
+// Mostrar los productos de una categoría específica
+export const getProductsByCategory = async (req, res) => {
+
+  const { category } = req.params;
+
+  try {
+
+    const result = await pool.query(
+      `
+      SELECT *
+      FROM producto
+      WHERE id_categoria = $1
+      `,
+      [category]
+    );
+
+    res.json(result.rows);
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      error: "Error al obtener productos"
+    });
+
+  }
+
+};
