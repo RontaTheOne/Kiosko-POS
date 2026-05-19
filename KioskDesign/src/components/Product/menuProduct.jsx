@@ -1,49 +1,38 @@
 import React from "react";
 
-function MenuProduct() {
+function MenuProduct({ categories, selectedCategory, onSelectCategory, onResetCategory }) {
   return (
-    <div class="d-flex gap-3 overflow-auto py-2 category-menu">
-      <button class="category-btn active">
-        <div class="icon-box">
-          <i class="fa-solid fa-burger"></i>
-        </div>
-        <span>Burgers</span>
-      </button>
+    <div className="menu-product">
+      <div className="category-menu d-flex gap-3 overflow-auto py-2">
+        <button
+          type="button"
+          className={`category-btn ${selectedCategory === null ? "active" : ""}`}
+          onClick={onResetCategory}
+        >
+          <div className="icon-box">
+            <i className="fa-solid fa-utensils"></i>
+          </div>
 
-      <button class="category-btn">
-        <div class="icon-box">
-          <i class="fa-solid fa-bowl-food"></i>
-        </div>
-        <span>Bowls</span>
-      </button>
+          <span>Todos</span>
+        </button>
 
-      <button class="category-btn">
-        <div class="icon-box">
-          <i class="fa-solid fa-pizza-slice"></i>
-        </div>
-        <span>Pizzas</span>
-      </button>
+        {categories.map((cat) => (
+          <button
+            key={cat.id_categoria}
+            type="button"
+            className={`category-btn ${
+              selectedCategory === cat.id_categoria ? "active" : ""
+            }`}
+            onClick={() => onSelectCategory(cat.id_categoria)}
+          >
+            <div className="icon-box">
+              <i className="fa-solid fa-burger"></i>
+            </div>
 
-      <button class="category-btn">
-        <div class="icon-box">
-          <i class="fa-solid fa-ice-cream"></i>
-        </div>
-        <span>Postres</span>
-      </button>
-
-      <button class="category-btn">
-        <div class="icon-box">
-          <i class="fa-solid fa-martini-glass"></i>
-        </div>
-        <span>Bebidas</span>
-      </button>
-
-      <button class="category-btn">
-        <div class="icon-box">
-          <i class="fa-solid fa-cookie"></i>
-        </div>
-        <span>Sides</span>
-      </button>
+            <span>{cat.nombre}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
