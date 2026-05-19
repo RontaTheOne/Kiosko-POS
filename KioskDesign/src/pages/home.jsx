@@ -3,6 +3,7 @@ import { useInactivityRedirect } from "../hooks/useInactivityRedirect";
 import ProductCard from "../components/Product/productCard";
 import ModalCard from "../components/Product/modalCard";
 import OrderCanvas from "../components/Order/orderCanvas";
+import MenuProduct from "../components/Product/menuProduct";
 
 function Home() {
   useInactivityRedirect("/");
@@ -70,6 +71,8 @@ function Home() {
     <div className="container d-flex flex-column align-items-center">
       <br />
       <h1 className="text-center">Home</h1>
+        {/* Menu de categorias */}
+        <MenuProduct />
 
       <div className="d-flex justify-content-center w-100 mb-3">
         <div className="btn-group" role="group" aria-label="Categorías">

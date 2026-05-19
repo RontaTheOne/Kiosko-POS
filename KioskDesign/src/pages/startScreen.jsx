@@ -1,24 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import backgroundImage from "../../public/img/backgroundStart.jpeg";
+import "../css/startScreen.css";
 
 function StartScreen() {
   return (
-    <div className="container">
-        <div className="align-items-center justify-content-center d-flex flex-column">
-        <br />
-        <h1>Bienvenido a Kiosk App</h1>
-        <p className="lead mb-4">
-          Haz tu pedido en segundos. Elige tú comida, personaliza y paga.
-        </p>
-        <Link to="/Tipo_Orden" className="btn btn-outline-primary">
-          Empezar
-        </Link>
+    <div
+      className="start-screen"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+      }}
+    >
+      <div className="start-content">
 
-        <small className="d-block mt-4 text-secondary">
-          <i class="bi bi-hand-index-thumb-fill"></i> Presiona “Empezar” para
-          continuar
-        </small>
+        <div class="d-grid gap-2">
+          <Link to="/Tipo_Orden" className="btn btn-danger">
+            Empezar
+          </Link>
         </div>
+
+        <small className="small mt-2">
+          <i className="bi bi-hand-index-thumb-fill"></i> Presiona “Empezar”
+          para iniciar el pedido
+        </small>
+      </div>
     </div>
   );
 }
