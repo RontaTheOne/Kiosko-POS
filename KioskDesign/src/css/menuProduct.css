@@ -2,6 +2,34 @@
   display: none;
 }
 
+.category-menu {
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ensure centering even with Bootstrap utility classes and when not overflowing */
+.menu-product {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.category-menu {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding-left: 0 !important;
+}
+
+/* When the menu overflows horizontally, allow scrolling but center the visible area */
+.category-menu.overflow-auto {
+  scroll-snap-type: x mandatory;
+}
+
+.category-menu > .category-btn {
+  scroll-snap-align: center;
+}
+
 .category-btn {
   min-width: 95px;
   height: 115px;

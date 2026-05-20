@@ -18,7 +18,7 @@ function PromotionProduct() {
         alt="Promoción"
         style={{ height: "250px", width: "100%", objectFit: "cover" }}
       />
-      <div className="card-img-overlay p-4">
+      <div className="card-img-overlay p-4 justify-content-end">
         <span className="badge text-bg-danger p-2">Oferta del dia</span>
         <h2 className="card-title">Combo para 2 personas</h2>
         <p className="card-text">

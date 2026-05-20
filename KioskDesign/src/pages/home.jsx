@@ -5,7 +5,9 @@ import ModalCard from "../components/Product/modalCard";
 import OrderCanvas from "../components/Order/orderCanvas";
 import MenuProduct from "../components/Product/menuProduct";
 import PromotionProduct from "../components/Product/promotionProduct";
+import CartSummary from "../components/Order/cartSummary";
 import "../css/menuProduct.css";
+import "../css/cartSummary.css";
 
 function Home() {
   useInactivityRedirect("/");
@@ -81,71 +83,68 @@ function Home() {
   };
 
   return (
-    <div className="container">
-      <br />
-      {/* Promoción del día */}
-      <PromotionProduct />
-      <br />
-      {/* Menu de categorias */}
-      <MenuProduct
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onSelectCategory={handleSelectCategory}
-        onResetCategory={handleResetCategory}
-      />
+    <div className="home-page">
+      <nav className="navbar bg-danger justify-content-center">
+        <div className="container">
+          <div className="navbar-brand mx-auto">
+            <img src="..." alt="Kiosk App Logo" width="150" />
+          </div>
+        </div>
+      </nav>
+      <div className="container my-4">
+        {/* Promoción del día */}
+        <PromotionProduct />
+        <br />
+        {/* Menu de categorias */}
+        <MenuProduct
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelectCategory={handleSelectCategory}
+          onResetCategory={handleResetCategory}
+        />
 
-      <div className="d-flex justify-content-between align-items-center">
-        <h2 className="mb-0">¿Qué quieres comer hoy?</h2>
-        <div className="d-flex align-items-center gap-2">
-          <span className="mb-0">
-            <strong>Ordenar por</strong>
-          </span>
-          <select
-            className="form-select form-select-sm w-auto"
-            aria-label="Ordenar por"
-          >
-            <option value="1">Más Popular</option>
-            <option value="2">Más Barato</option>
-          </select>
+        <div className="d-flex justify-content-between align-items-center">
+          <h2 className="mb-0">¿Qué quieres comer hoy?</h2>
+          <div className="d-flex align-items-center gap-2">
+            <span className="mb-0">
+              <strong>Ordenar por</strong>
+            </span>
+            <select
+              className="form-select form-select-sm w-auto"
+              aria-label="Ordenar por"
+            >
+              <option value="1">Más Popular</option>
+              <option value="2">Más Barato</option>
+            </select>
+          </div>
+        </div>
+        <br />
+        {/* Ver del productos */}
+        <div className="row g-3 justify-content-center w-100">
+          {products.map((product) => (
+            <div className="col-12 col-md-4" key={product.id_producto}>
+              <ProductCard
+                product={product}
+                onClick={() => handleSelectedProduct(product.id_producto)}
+              />
+            </div>
+          ))}
         </div>
       </div>
-        <br />
-      {/* Ver del productos */}
-      <div className="row g-3 justify-content-center w-100">
-        {products.map((product) => (
-          <div className="col-12 col-md-4" key={product.id_producto}>
-            <ProductCard
-              product={product}
-              onClick={() => handleSelectedProduct(product.id_producto)}
-            />
-          </div>
-        ))}
-      </div>
-
-      <br />
-      {/* Modal del producto */}
-      {showModal && selectedProduct && (
-        <ModalCard
-          product={selectedProduct}
-          onClose={() => setShowModal(false)}
-        />
-      )}
-
+             <br />
+      {/* Menu de la orden*/}
+        <CartSummary />
       {/* Canvas de orden */}
-      <button
-        className="btn btn-primary position-relative"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasBottom"
-        aria-controls="offcanvasBottom"
-      >
-        <i className="bi bi-basket2-fill"></i> Ver orden
-        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          0
-        </span>
-        <span className="visually-hidden">unread messages</span>
-      </button>
-      <OrderCanvas />
+        <OrderCanvas />
+      {/* Modal del producto */}
+        {showModal && selectedProduct && (
+          <ModalCard
+            product={selectedProduct}
+            onClose={() => setShowModal(false)}
+          />
+        )}  
+          
+      
     </div>
   );
 }

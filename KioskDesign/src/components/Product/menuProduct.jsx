@@ -2,7 +2,7 @@ import React from "react";
 
 function MenuProduct({ categories, selectedCategory, onSelectCategory, onResetCategory }) {
   return (
-    <div className="menu-product">
+    <div className="menu-product d-flex align-items-center">
       <div className="category-menu d-flex gap-3 overflow-auto py-2">
         <button
           type="button"
