@@ -3,7 +3,15 @@ import React from "react";
 function MenuProduct({ categories, selectedCategory, onSelectCategory, onResetCategory }) {
   return (
     <div className="menu-product d-flex align-items-center">
-      <div className="category-menu d-flex gap-3 overflow-auto py-2">
+      <div className="category-menu d-flex
+      flex-nowrap
+      gap-3
+      overflow-auto
+      py-2
+      px-2
+      justify-content-md-center
+      justify-content-start
+      align-items-center">
         <button
           type="button"
           className={`category-btn ${selectedCategory === null ? "active" : ""}`}

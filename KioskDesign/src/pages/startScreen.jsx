@@ -13,7 +13,7 @@ function StartScreen() {
     >
       <div className="start-content">
 
-        <div class="d-grid gap-2">
+        <div className="d-grid gap-2">
           <Link to="/Tipo_Orden" className="btn btn-danger">
             Empezar
           </Link>

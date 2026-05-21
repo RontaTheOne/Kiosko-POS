@@ -40,7 +40,7 @@ const totalProducts = cart.reduce(
         </button>
 
         {/* Botón pagar */}
-        <div to="/checkout" className="btn btn-danger pay-btn">
+        <div className="btn btn-danger pay-btn">
           Pagar
         </div>
       </div>

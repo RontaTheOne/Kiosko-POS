@@ -2,25 +2,49 @@ import React from "react";
 
 function ProductCard({ product, onClick }) {
   return (
-      <div className="card product-card h-100 text-center" 
+    <div
+      className="card product-card h-100 text-center position-relative"
+    >
+      {/* Botón pequeño superior derecho */}
+      <button
+        className="btn btn-danger btn-sm position-absolute"
+        style={{
+          top: "10px",
+          right: "10px",
+          width: "50px",
+          height: "50px",
+          padding: 0,
+          borderRadius: "8px",
+          zIndex: 2,
+        }}
         onClick={onClick}
       >
-        {/* Imagen opcional (puedes reemplazarla si luego tienes imágenes reales) */}
-        <img
-          src={"https://s7d1.scene7.com/is/image/mcdonalds/DC_202201_0007-005_QuarterPounderwithCheese_1564x1564-1:nutrition-calculator-tile"}
-          className="card-img-top"
-          alt={product.nombre}
-          style={{ height: "200px", objectFit: "contain", width: "100%", padding: "10px" }}
-        />
+        <i className="bi bi-plus-lg"></i>
+      </button>
 
-        <div className="card-body d-flex flex-column">
-          <h5 className="card-title">{product.nombre}</h5>
+      {/* Imagen */}
+      <img
+        src={
+          "https://api-middleware-mcd.mcdonaldscupones.com/media/image/product$Hamburguesa%20con%20queso%20(2).png/200/200/original?country=co"
+        }
+        className="card-img-top"
+        alt={product.nombre}
+        style={{
+          height: "200px",
+          objectFit: "contain",
+          width: "100%",
+          padding: "10px",
+        }}
+      />
 
-          <p className="card-text fw-bold">
-            $ {parseFloat(product.precio_base)}
-          </p>
-        </div>
+      <div className="card-body d-flex flex-column">
+        <h2 className="card-title">{product.nombre}</h2>
+
+        <h5 className="card-text fw-bold text-warning mt-auto">
+          $ {parseFloat(product.precio_base)}
+        </h5>
       </div>
+    </div>
   );
 }
 

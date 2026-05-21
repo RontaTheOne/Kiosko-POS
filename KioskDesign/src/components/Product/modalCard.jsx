@@ -24,10 +24,9 @@ function ModalCard({ product, onClose }) {
     <div className="modal fade show d-block text-center" tabIndex="-1" role="dialog">
       <div className="modal-dialog">
         <div className="modal-content">
-
-          <div className="modal-header">
+          <div className="modal-header bg-danger text-white d-flex justify-content-between align-items-center">
             <h5>{product.nombre}</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
           </div>
 
           <div className="modal-body">
@@ -44,10 +43,10 @@ function ModalCard({ product, onClose }) {
           <div className="modal-footer d-flex justify-content-center">
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-danger btn-lg"
               onClick={handleAdd}
             >
-              Agregar al carrito
+               <i className="bi bi-plus-lg"></i>  Agregar al carrito
             </button>
           </div>
 

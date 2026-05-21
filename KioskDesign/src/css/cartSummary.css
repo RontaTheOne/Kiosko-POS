@@ -162,25 +162,23 @@
 ========================= */
 
 .pay-btn {
-  height: 40px;
-
-  min-width: 100px;
-
-  display: flex !important;
+  height: 45px;
+  min-width: 80px;
+  display: flex;
   align-items: center;
   justify-content: center;
 
   text-align: center;
 
-  background: #cf102d !important;
+  background: #cf102d;
 
-  border: none !important;
+  border: none;
 
-  color: white !important;
+  color: white;
 
-  font-size: 22px !important;
+  font-size: 22px;
 
-  font-weight: 700 !important;
+  font-weight: 700;
 
   transition: 0.2s ease;
 }
@@ -188,7 +186,7 @@
 
 /* Hover */
 .pay-btn:hover {
-  background: #b90d28 !important;
+  background: #b90d28;
 
   transform: scale(1.02);
 }
@@ -228,10 +226,8 @@
   }
 
   .pay-btn {
-    height: 48px;
-
+    height: 35px;
     min-width: 110px;
-
-    font-size: 18px !important;
+    font-size: 18px;
   }
 }

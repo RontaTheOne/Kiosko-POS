@@ -84,7 +84,7 @@ function Home() {
 
   return (
     <div className="home-page">
-      <nav className="navbar bg-danger justify-content-center">
+      <nav className="navbar bg-body-tertiary justify-content-center">
         <div className="container">
           <div className="navbar-brand mx-auto">
             <img src="..." alt="Kiosk App Logo" width="150" />
@@ -104,7 +104,7 @@ function Home() {
         />
 
         <div className="d-flex justify-content-between align-items-center">
-          <h2 className="mb-0">¿Qué quieres comer hoy?</h2>
+          <h1 className="mb-0">¿Qué quieres comer hoy?</h1>
           <div className="d-flex align-items-center gap-2">
             <span className="mb-0">
               <strong>Ordenar por</strong>
