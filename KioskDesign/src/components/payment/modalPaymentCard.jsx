@@ -38,7 +38,7 @@ function ModalPaymentCard({ processingCard, paymentStatus, onClose, onFinish }) 
               <div className="modal-footer justify-content-center">
                 <button
                   type="button"
-                  className={`btn ${paymentStatus.success ? "btn-success" : "btn-secondary"}`}
+                  className={`btn ${paymentStatus.success ? "btn-danger" : "btn-danger"}`}
                   onClick={paymentStatus.success ? onFinish : onClose}
                 >
                   {paymentStatus.success ? "Finalizar" : "Cerrar"}

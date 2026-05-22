@@ -86,8 +86,8 @@ function Home() {
     <div className="home-page">
       <nav className="navbar bg-body-tertiary justify-content-center">
         <div className="container">
-          <div className="navbar-brand mx-auto">
-            <img src="..." alt="Kiosk App Logo" width="150" />
+          <div className="navbar-brand mx-auto text-danger fw-bold fs-3">
+            Kiosk App
           </div>
         </div>
       </nav>
