@@ -1,3 +1,6 @@
+/* =========================
+MENU PRODUCT
+========================= */
 .category-menu::-webkit-scrollbar {
   display: none;
 }
@@ -6,8 +9,9 @@
   justify-content: center;
   align-items: center;
 }
-
-/* Ensure centering even with Bootstrap utility classes and when not overflowing */
+/* =========================
+MENU PRODUCT - SCROLL SNAP
+========================= */
 .menu-product {
   display: flex;
   width: 100%;
@@ -15,21 +19,24 @@
 }
 
 .category-menu {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding-left: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
 }
 
-/* When the menu overflows horizontally, allow scrolling but center the visible area */
 .category-menu.overflow-auto {
   scroll-snap-type: x mandatory;
 }
-
+/* =========================
+  MENU PRODUCT - CATEGORY BUTTON
+========================= */
 .category-menu > .category-btn {
   scroll-snap-align: center;
 }
-
+/* =========================
+   MENU PRODUCT - CATEGORY BUTTON
+========================= */
 .category-btn {
   min-width: 95px;
   height: 115px;
@@ -48,7 +55,9 @@
   transform: translateY(-4px);
   background: #ece8e8;
 }
-
+/* =========================
+  ICON BOX
+========================= */
 .icon-box {
   width: 60px;
   height: 60px;
@@ -60,7 +69,9 @@
   font-size: 18px;
   color: #666;
 }
-
+/* =========================
+   ICON BOX- ICONOS Y TEXTO
+========================= */
 .icon-box i {
   font-size: 30px;
   color: #d62828;
@@ -72,7 +83,9 @@
   color: #4a4a4a;
 }
 
-/* ACTIVE */
+/* =========================
+  ACTIVE CATEGORY BUTTON
+========================= */
 .category-btn.active {
   border: 1.5px solid #d62828;
   background: #f8f5f5;

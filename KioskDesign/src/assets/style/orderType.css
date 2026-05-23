@@ -1,4 +1,6 @@
-/* CARD */
+/* =========================
+   CARD STYLE
+========================= */
 .order-card {
   width: 100%;
   max-width: 420px;
@@ -25,7 +27,9 @@
   cursor: pointer;
 }
 
-/* ICON */
+/* =========================
+   ICONO DEL CARD
+========================= */
 .order-card__icon {
   width: 100px;
   height: 100px;
@@ -42,9 +46,9 @@
   height: 46px;
   object-fit: contain;
 }
-
-/* LINE */
-
+/* =========================
+    LINEA DEL CARD
+========================= */
 .order-card__line {
   width: 60px;
   height: 5px;
@@ -53,9 +57,9 @@
 
   margin-bottom: 28px;
 }
-
-/* TITLE */
-
+/* =========================
+    TITULO DEL CARD
+========================= */
 .order-card__title {
   font-size: clamp(2.4rem, 4vw, 4rem);
   font-weight: 800;
@@ -63,18 +67,18 @@
   margin-bottom: 20px;
   letter-spacing: -2px;
 }
-
-/* DESCRIPTION */
-
+/*=========================
+  DESCRIPCION DEL CARD
+========================= */
 .order-card__description {
   width: 85%;
   color: #666;
   font-size: 1.08rem;
   line-height: 1.9;
 }
-
-/* BOTTOM COLORS */
-
+/* =========================
+  BOTTOM DEL CARD
+========================= */
 .order-card__bottom {
   position: absolute;
   bottom: 0;
@@ -83,7 +87,9 @@
   height: 8px;
   display: flex;
 }
-
+/* =========================
+  ICONOS DEL CARD
+========================= */
 .bi-fork-knife{
   font-size: 2.5rem;
   color: #fff;
@@ -93,12 +99,15 @@
   font-size: 2.5rem;
   color: #fff;
 }
-/* ACTIVE CARD */
+/* =========================
+  CARD DE DELIVERY
+========================= */
 .order-card--take {
   border: 2px solid #d9d9d9;
 }
-
-/* HOVER */
+/* =========================
+  CARD DE DELIVERY HOVER
+========================= */
 .order-card:hover {
   transform: translateY(-8px);
   box-shadow:

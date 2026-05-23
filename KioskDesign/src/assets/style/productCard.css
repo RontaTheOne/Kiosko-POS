@@ -1,9 +1,14 @@
+/* =========================
+  ESTILOS DEL CARD DE PRODUCTO
+========================= */
 .product-card {
   border: 1px solid #dcdcdc;
   transition: all 0.3s ease;
   cursor: pointer;
 }
-
+/* =========================
+  EFECTO HOVER DEL CARD DE PRODUCTO
+========================= */
 .product-card:hover {
   border-color: #dc3545; /* rojo bootstrap */
   box-shadow: 0 0 12px rgba(220, 53, 69, 0.25);

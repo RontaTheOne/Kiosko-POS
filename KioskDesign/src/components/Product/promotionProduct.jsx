@@ -1,12 +1,12 @@
 import React from "react";
 import "../../assets/style/promotionProduct.css";
-
+import promoImage from "../../assets/img/promo.png"; // Asegúrate de tener esta imagen en tu proyecto
 
 function PromotionProduct() {
   return (
     <div className="card promotion-card text-bg-dark">
       <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy9K_xiI4RpILq4Jd-80k7_VkfCg-nvyhWnA&s"
+        src={promoImage}
         className="card-img"
         alt="Promoción"
       />

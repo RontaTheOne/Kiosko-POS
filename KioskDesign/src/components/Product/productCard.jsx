@@ -1,11 +1,11 @@
 import React from "react";
+import { getProductImage } from "../../utils/productImages";
 
 function ProductCard({ product, onClick }) {
   return (
     <div
       className="card product-card h-100 text-center position-relative"
     >
-      {/* Botón pequeño superior derecho */}
       <button
         className="btn btn-danger btn-sm position-absolute"
         style={{
@@ -22,11 +22,8 @@ function ProductCard({ product, onClick }) {
         <i className="bi bi-plus-lg"></i>
       </button>
 
-      {/* Imagen */}
       <img
-        src={
-          "https://api-middleware-mcd.mcdonaldscupones.com/media/image/product$Hamburguesa%20con%20queso%20(2).png/200/200/original?country=co"
-        }
+        src={getProductImage(product.nombre)}
         className="card-img-top"
         alt={product.nombre}
         style={{

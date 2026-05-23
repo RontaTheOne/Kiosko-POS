@@ -4,7 +4,9 @@ import { useCart } from "../context/cartContext";
 export function useHandlePay() {
   const navigate = useNavigate();
   const { cart, clearCart, tipoOrden } = useCart();
-
+/* =========================
+  FUNCION PARA REALIZAR EL PAGO
+========================= */
   const handlePay = async () => {
     try {
       const response = await fetch("http://localhost:3000/orden", {

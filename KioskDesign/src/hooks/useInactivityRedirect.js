@@ -47,7 +47,9 @@ const removeListeners = () => {
 };
 
 let mountCount = 0;
-
+/* =========================
+ REDIRECCIONAR POR INACTIVIDAD
+========================= */
 export function useInactivityRedirect(path = "/", timeoutMs = 120000) {
   const navigate = useNavigate();
 

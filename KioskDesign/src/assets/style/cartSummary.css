@@ -183,7 +183,9 @@
   transition: 0.2s ease;
 }
 
-
+/* =========================
+    EFECTO DE PRESIÓN
+========================= */
 /* Hover */
 .pay-btn:hover {
   background: #b90d28;

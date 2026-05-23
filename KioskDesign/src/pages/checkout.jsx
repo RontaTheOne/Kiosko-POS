@@ -1,139 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useCheckout } from "../hooks/useCheckout.js";
 import ModalPaymentCard from "../components/payment/modalPaymentCard";
-import { downloadInvoice } from "../utils/downloadInvoice";
 import "../assets/style/checkout.css";
 
 function Checkout() {
-  const navigate = useNavigate();
+  const { 
+    order,
+    methods,
+    totalProducts,
+    processingCard,
+    paymentStatus, 
+    handlePayment, 
+    setPaymentStatus,
+    navigate
+  } = useCheckout();
 
-  const location = useLocation();
-
-  // orden
-  const [order] = useState(() => {
-    if (location.state && location.state.order) {
-      return location.state.order;
-    }
-
-    const stored = sessionStorage.getItem("order");
-
-    return stored ? JSON.parse(stored) : null;
-  });
-
-  // métodos
-  const [methods, setMethods] = useState([]);
-
-  const totalProducts =
-    order?.productCount ||
-    order?.totalProductos ||
-    order?.detalles?.reduce(
-      (sum, item) => sum + (Number(item.cantidad) || 0),
-      0,
-    ) ||
-    0;
-
-  // loading tarjeta
-  const [processingCard, setProcessingCard] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null);
-
-  // guardar orden
-  useEffect(() => {
-    if (order) {
-      sessionStorage.setItem("order", JSON.stringify(order));
-    }
-  }, [order]);
-
-  // métodos de pago
-  useEffect(() => {
-    fetch("http://localhost:3000/metodo-pago")
-      .then((res) => res.json())
-      .then((data) => setMethods(data))
-      .catch((error) => console.error(error));
-  }, []);
-
-  // delay
-  const delay = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
-  // crear pago
-  const handlePayment = async (method) => {
-    if (!order) return;
-
-    try {
-      // crear pago
-      const res = await fetch(`http://localhost:3000/pago/${order.id_orden}`, {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          id_metodo_pago: method.id_metodo_pago,
-
-          monto: order.total,
-        }),
-      });
-
-      const data = await res.json();
-
-      console.log(data);
-
-      // efectivo
-      if (data.nombre === "efectivo") {
-        navigate(`/pago/efectivo/${data.pago.id_pago}`);
-      }
-
-      // tarjeta
-      if (data.nombre === "tarjeta") {
-        setProcessingCard(true);
-        setPaymentStatus(null);
-
-        // simulación datafono
-        await delay(2500);
-
-        const paymentRes = await fetch(
-          `http://localhost:3000/pago/tarjeta/${data.pago.id_pago}`,
-          {
-            method: "PUT",
-          },
-        );
-
-        const paymentData = await paymentRes.json();
-
-        console.log(paymentData);
-
-        setProcessingCard(false);
-
-        if (paymentData.success) {
-          setPaymentStatus({
-            success: true,
-            title: "Pago aprobado por el banco",
-            description: "Su pago ha sido autorizado exitosamente.",
-          });
-
-          await downloadInvoice(order.id_orden);
-        } else {
-          setPaymentStatus({
-            success: false,
-            title: "Pago rechazado",
-            description:
-              "El banco no pudo autorizar el pago. Intente con otra tarjeta o método.",
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Error procesando pago:", error);
-    }
-  };
-
-  // sin orden
-  if (!order) {
+   if (!order) {
     return (
       <div className="container text-center mt-5">
-        <div className="spinner-border text-danger" role="status" />
+        <div className="spinner-border text-danger" />
 
-        <h5 className="mt-3">No hay orden activa</h5>
+        <h5 className="mt-3">
+          No hay orden activa
+        </h5>
       </div>
     );
   }

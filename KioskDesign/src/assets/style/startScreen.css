@@ -1,4 +1,6 @@
-/* Fondo fijo */
+/* =========================
+    Estilos para la pantalla de inicio
+========================= */
 .start-screen {
     width: 100%;
     height: 100vh;
@@ -14,8 +16,9 @@
     position: relative;
     overflow: hidden;
 }
-
-/* Overlay */
+/* =========================
+    Overlay
+========================= */
 .start-screen::before {
     content: "";
     position: absolute;
@@ -30,8 +33,9 @@
 
     z-index: 1;
 }
-
-/* Contenedor comida */
+/* =========================
+    Carrusel de comida
+========================= */
 .food-slider {
     position: absolute;
 
@@ -51,8 +55,9 @@
 
     pointer-events: none;
 }
-
-/* Comida */
+/* =========================
+    Imágenes de comida
+========================= */
 .food-image {
     position: absolute;
 
@@ -69,8 +74,9 @@
         opacity 1s ease,
         transform 1s ease;
 }
-
-/* Imagen activa */
+/* =========================
+ IMAGEN ACTIVA
+========================= */
 .food-image.active {
     opacity: 1;
 
@@ -80,8 +86,9 @@
 
     animation: floatFood 4s ease-in-out infinite;
 }
-
-/* Contenido inferior */
+/* =========================
+    CONTENIDO DE LA PANTALLA DE INICIO
+========================= */
 .start-content {
     position: relative;
     z-index: 3;
@@ -100,7 +107,9 @@
     text-align: center;
 }
 
-/* Texto */
+/* =========================
+    TEXTO AUXILIAR
+========================= */
 .small-start-screen {
     font-size: 0.75rem;
     color: #fff;

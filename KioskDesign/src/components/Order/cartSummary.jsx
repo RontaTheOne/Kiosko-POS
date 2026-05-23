@@ -1,6 +1,6 @@
 import React from "react";
 import { useCart } from "../../context/cartContext";
-import { useHandlePay } from "../../hooks/handlePay";
+import { useHandlePay } from "../../hooks/handlePay.js";
 import "../../assets/style/cartSummary.css";
 
 function CartSummary() {

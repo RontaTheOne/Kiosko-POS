@@ -1,6 +1,6 @@
 import React from "react";
-import { useInactivityRedirect } from "../../hooks/useInactivityRedirect";
-import { useHandlePay } from "../../hooks/handlePay";
+import { useInactivityRedirect } from "../../hooks/useInactivityRedirect.js";
+import { useHandlePay } from "../../hooks/handlePay.js";
 import { useCart } from "../../context/cartContext";
 
 function OrderCanvas() {

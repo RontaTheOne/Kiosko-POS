@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useInactivityRedirect } from "../hooks/useInactivityRedirect";
+import { useInactivityRedirect } from "../hooks/useInactivityRedirect.js";
+import { useProducts } from "../hooks/useProduct.js";
 import ProductCard from "../components/Product/productCard";
 import ModalCard from "../components/Product/modalCard";
 import OrderCanvas from "../components/Order/orderCanvas";
@@ -9,81 +9,28 @@ import CartSummary from "../components/Order/cartSummary";
 
 function Home() {
   useInactivityRedirect("/");
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const categoryIcons = {
-    acompañantes: "fa-solid fa-drumstick-bite",
-    bebidas: "fa-solid fa-glass-water",
-    "comidas rápidas": "fa-solid fa-burger",
-    postres: "fa-solid fa-ice-cream"
-  };
-
-  {
-    /* Fetch de productos */
-  }
-  useEffect(() => {
-    fetch("http://localhost:3000/producto")
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error("Error:", err));
-  }, []);
-
-  {
-    /* Fetch de categorias */
-  }
-  useEffect(() => {
-    fetch("http://localhost:3000/producto/categoria")
-      .then((res) => res.json())
-      .then((data) => setCategories(data))
-      .catch((err) => console.error("Error:", err));
-  }, []);
-
-  /* Productos por categoria */
+  const { 
+    products,
+    categories,
+    selectedCategory,
+    selectedProduct,
+    showModal,
+    categoryIcons,
+    loadProducts,
+    setSelectedCategory,
+    setShowModal,
+    filterByCategory,
+    handleSelectedProduct,
+  } = useProducts();
 
   const handleSelectCategory = async (idCategoria) => {
-    try {
-      setSelectedCategory(idCategoria);
-
-      const response = await fetch(
-        `http://localhost:3000/producto/categoria/${idCategoria}`,
-      );
-
-      const data = await response.json();
-
-      setProducts(data);
-    } catch (err) {
-      console.error("Error al obtener productos:", err);
-    }
+    setSelectedCategory(idCategoria);
+    await filterByCategory(idCategoria);
   };
 
   const handleResetCategory = async () => {
-    try {
-      setSelectedCategory(null);
-
-      const response = await fetch("http://localhost:3000/producto");
-      const data = await response.json();
-
-      setProducts(data);
-    } catch (err) {
-      console.error("Error al obtener productos:", err);
-    }
-  };
-
-  {
-    /*Producto seleccionado para el modal */
-  }
-  const handleSelectedProduct = async (id) => {
-    try {
-      const res = await fetch(`http://localhost:3000/producto/${id}`);
-      const product = await res.json();
-      setSelectedProduct(product);
-      setShowModal(true);
-    } catch (err) {
-      console.error("Error:", err);
-    }
+    setSelectedCategory(null);
+    await loadProducts();
   };
 
   return (
@@ -107,7 +54,7 @@ function Home() {
           onResetCategory={handleResetCategory}
           categoryIcons={categoryIcons}
         />
-
+        {/* Título y ordenamiento */}
         <div className="d-flex justify-content-between align-items-center">
           <h1 className="mb-0">¿Qué quieres comer hoy?</h1>
           <div className="d-flex align-items-center gap-2">
@@ -123,7 +70,7 @@ function Home() {
             </select>
           </div>
         </div>
-        <br />
+          <br />
         {/* Ver del productos */}
         <div className="row g-3 justify-content-center w-100">
           {products.map((product) => (
@@ -136,8 +83,8 @@ function Home() {
           ))}
         </div>
       </div>
-             <br />
-      {/* Menu de la orden*/}
+        <br />
+      {/*Resumen del carrito */}
         <CartSummary />
       {/* Canvas de orden */}
         <OrderCanvas />
@@ -148,8 +95,6 @@ function Home() {
             onClose={() => setShowModal(false)}
           />
         )}  
-          
-      
     </div>
   );
 }
