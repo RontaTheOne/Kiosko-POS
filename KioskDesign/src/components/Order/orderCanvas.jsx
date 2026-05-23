@@ -1,11 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useInactivityRedirect } from "../../hooks/useInactivityRedirect";
+import { useHandlePay } from "../../hooks/handlePay";
 import { useCart } from "../../context/cartContext";
 
 function OrderCanvas() {
   const { cart, incrementQuantity, decrementQuantity, clearCart, removeFromCart, tipoOrden } = useCart();
-  const navigate = useNavigate();
+  const { handlePay } = useHandlePay();
 
   useInactivityRedirect("/");
 
@@ -15,58 +15,10 @@ function OrderCanvas() {
       : tipoOrden === "llevar" || tipoOrden === "para_llevar"
       ? "Para llevar"
       : tipoOrden;
-
   const orderIcon = tipoOrden === "comer_aqui" ? "bi bi-fork-knife" : "bi bi-bag-fill";
-
   const subtotal = cart.reduce((acc, product) => acc + product.precio_unitario * product.quantity, 0);
   const iva = subtotal * 0.19;
   const total = subtotal + iva;
-
-  const handlePay = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/orden", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          tipo_orden: tipoOrden,
-          productos: cart.map(p => ({
-            id_producto: p.id_producto,
-            cantidad: p.quantity,
-
-          }))
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.error);
-        return;
-      }
-
-      clearCart();
-      console.log(cart);
-
-      const productCount = cart.reduce(
-        (acc, product) => acc + (Number(product.quantity) || 0),
-        0
-      );
-
-      navigate(`/Pago`, 
-        { 
-          state: { 
-            order: { ...data, productCount }
-           } 
-      });
-
-    } catch (error) {
-      console.error(error);
-      console.log(cart);
-      alert("Error en el proceso de pago");
-    }
-  };
 
   return (
     <div

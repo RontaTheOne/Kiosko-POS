@@ -1,5 +1,6 @@
 import React from "react";
-import "../../css/promotionProduct.css"; 
+import "../../assets/style/promotionProduct.css";
+
 
 function PromotionProduct() {
   return (

@@ -1,9 +1,11 @@
 import React from "react";
 import { useCart } from "../../context/cartContext";
-import "../../css/cartSummary.css";
+import { useHandlePay } from "../../hooks/handlePay";
+import "../../assets/style/cartSummary.css";
 
 function CartSummary() {
   const { cart} = useCart();
+  const { handlePay } = useHandlePay();
   const subtotal = cart.reduce(
   (acc, product) =>
     acc + product.precio_unitario * product.quantity,
@@ -40,9 +42,9 @@ const totalProducts = cart.reduce(
         </button>
 
         {/* Botón pagar */}
-        <div className="btn btn-danger pay-btn">
+        <button className="btn btn-danger pay-btn" onClick={handlePay}>
           Pagar
-        </div>
+        </button>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import backgroundImage from "../assets/img/backgroundStart.png";
 import food1 from "../assets/img/food1.png";
 import food2 from "../assets/img/food2.png";
-import "../css/startScreen.css";
+import "../assets/style/startScreen.css";
 
 function StartScreen() {
   const foods = [food1, food2];

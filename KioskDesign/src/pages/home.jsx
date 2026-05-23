@@ -6,8 +6,6 @@ import OrderCanvas from "../components/Order/orderCanvas";
 import MenuProduct from "../components/Product/menuProduct";
 import PromotionProduct from "../components/Product/promotionProduct";
 import CartSummary from "../components/Order/cartSummary";
-import "../css/menuProduct.css";
-import "../css/cartSummary.css";
 
 function Home() {
   useInactivityRedirect("/");
@@ -16,6 +14,12 @@ function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const categoryIcons = {
+    acompañantes: "fa-solid fa-drumstick-bite",
+    bebidas: "fa-solid fa-glass-water",
+    "comidas rápidas": "fa-solid fa-burger",
+    postres: "fa-solid fa-ice-cream"
+  };
 
   {
     /* Fetch de productos */
@@ -101,6 +105,7 @@ function Home() {
           selectedCategory={selectedCategory}
           onSelectCategory={handleSelectCategory}
           onResetCategory={handleResetCategory}
+          categoryIcons={categoryIcons}
         />
 
         <div className="d-flex justify-content-between align-items-center">

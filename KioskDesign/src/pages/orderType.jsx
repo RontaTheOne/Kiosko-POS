@@ -1,7 +1,7 @@
 import React from "react";
 import { useCart } from "../context/cartContext";
 import { useNavigate } from "react-router-dom";
-import "../css/orderType.css";
+import "../assets/style/orderType.css";
 
 function OrderType() {
   const { setTipoOrden } = useCart();

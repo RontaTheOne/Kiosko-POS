@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ModalPaymentCard from "../components/payment/modalPaymentCard";
 import { downloadInvoice } from "../utils/downloadInvoice";
-import "../css/checkout.css";
+import "../assets/style/checkout.css";
 
 function Checkout() {
   const navigate = useNavigate();

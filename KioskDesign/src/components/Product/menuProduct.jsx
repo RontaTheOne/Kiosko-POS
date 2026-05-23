@@ -1,6 +1,6 @@
 import React from "react";
-
-function MenuProduct({ categories, selectedCategory, onSelectCategory, onResetCategory }) {
+import "../../assets/style/menuProduct.css";
+function MenuProduct({ categories,categoryIcons, selectedCategory, onSelectCategory, onResetCategory }) {
   return (
     <div className="menu-product d-flex align-items-center">
       <div className="category-menu d-flex
@@ -34,7 +34,8 @@ function MenuProduct({ categories, selectedCategory, onSelectCategory, onResetCa
             onClick={() => onSelectCategory(cat.id_categoria)}
           >
             <div className="icon-box">
-              <i className="fa-solid fa-burger"></i>
+              <i className={'fa-solid ' + (categoryIcons[cat.nombre.toLowerCase()] || "fa-solid fa-utensils")}>
+              </i>
             </div>
 
             <span>{cat.nombre}</span>
