@@ -1,0 +1,101 @@
+/* =========================
+MENU PRODUCT
+========================= */
+.category-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.category-menu {
+  justify-content: center;
+  align-items: center;
+}
+/* =========================
+MENU PRODUCT - SCROLL SNAP
+========================= */
+.menu-product {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.category-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+}
+
+.category-menu.overflow-auto {
+  scroll-snap-type: x mandatory;
+}
+/* =========================
+  MENU PRODUCT - CATEGORY BUTTON
+========================= */
+.category-menu > .category-btn {
+  scroll-snap-align: center;
+}
+/* =========================
+   MENU PRODUCT - CATEGORY BUTTON
+========================= */
+.category-btn {
+  min-width: 95px;
+  height: 115px;
+  border: none;
+  border-radius: 18px;
+  background: #f4f1f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  transition: 0.25s ease;
+}
+
+.category-btn:hover {
+  transform: translateY(-4px);
+  background: #ece8e8;
+}
+/* =========================
+  ICON BOX
+========================= */
+.icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #666;
+}
+/* =========================
+   ICON BOX- ICONOS Y TEXTO
+========================= */
+.icon-box i {
+  font-size: 30px;
+  color: #d62828;
+}
+
+.category-btn span {
+  font-size: 15px;
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
+/* =========================
+  ACTIVE CATEGORY BUTTON
+========================= */
+.category-btn.active {
+  border: 1.5px solid #d62828;
+  background: #f8f5f5;
+}
+
+.category-btn.active .icon-box {
+  background: #f8dada;
+  color: #c1121f;
+}
+
+.category-btn.active span {
+  color: #1f1f1f;
+}

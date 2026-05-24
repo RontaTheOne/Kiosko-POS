@@ -1,4 +1,6 @@
 import React from "react";
+import success from "../../assets/img/success.png";
+import error from "../../assets/img/error.png";
 
 function ModalPaymentCard({ processingCard, paymentStatus, onClose, onFinish }) {
   const title = processingCard
@@ -25,10 +27,17 @@ function ModalPaymentCard({ processingCard, paymentStatus, onClose, onFinish }) 
                 </>
               ) : (
                 <>
-                  <div className={`mb-3 text-${paymentStatus.success ? "success" : "danger"}`}>
-                    <strong style={{ fontSize: "2rem" }}>
-                      {paymentStatus.success ? "✔" : "✖"}
-                    </strong>
+                  <div className="mb-3">
+                    <img
+                      src={paymentStatus?.success === true ? error : success}
+                      alt={paymentStatus?.success === true ? "Pago exitoso" : "Pago fallido"}
+                      className="img-fluid"
+                      style={{
+                        width: "90px",
+                        height: "90px",
+                        objectFit: "contain",
+                      }}
+                    />
                   </div>
                   <p className="fs-5">{paymentStatus.description}</p>
                 </>
@@ -38,7 +47,7 @@ function ModalPaymentCard({ processingCard, paymentStatus, onClose, onFinish }) 
               <div className="modal-footer justify-content-center">
                 <button
                   type="button"
-                  className={`btn ${paymentStatus.success ? "btn-success" : "btn-secondary"}`}
+                  className={`btn ${paymentStatus.success ? "btn-danger" : "btn-danger"}`}
                   onClick={paymentStatus.success ? onFinish : onClose}
                 >
                   {paymentStatus.success ? "Finalizar" : "Cerrar"}

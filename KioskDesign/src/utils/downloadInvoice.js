@@ -1,5 +1,8 @@
 import jsPDF from "jspdf";
 
+/* =========================
+  DESCARGAR FACTURA
+========================= */
 export async function downloadInvoice(orderId) {
   try {
     const response = await fetch(
